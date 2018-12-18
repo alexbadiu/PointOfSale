@@ -32,6 +32,8 @@ public class Product implements Serializable {
     private String code;
     
     private Integer price;
+    
+    private Integer quantity;
 
     public Integer getId() {
         return id;
@@ -71,6 +73,14 @@ public class Product implements Serializable {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
     
     @Override
