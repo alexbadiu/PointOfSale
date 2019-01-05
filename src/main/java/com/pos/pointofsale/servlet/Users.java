@@ -6,7 +6,7 @@
 package com.pos.pointofsale.servlet;
 
 import com.pos.pointofsale.EJB.UserBean;
-import com.pos.pointofsale.common.UserDetails;
+import com.pos.pointofsale.details.UserDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;

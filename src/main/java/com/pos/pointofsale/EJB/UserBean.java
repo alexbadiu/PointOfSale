@@ -6,7 +6,7 @@
 package com.pos.pointofsale.EJB;
 
 
-import com.pos.pointofsale.common.UserDetails;
+import com.pos.pointofsale.details.UserDetails;
 import com.pos.pointofsale.entity.User;
 import java.util.ArrayList;
 import java.util.Collection;
