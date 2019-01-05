@@ -9,6 +9,7 @@ package com.pos.pointofsale.EJB;
 import com.pos.pointofsale.common.UserDetails;
 import com.pos.pointofsale.entity.User;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -42,6 +43,23 @@ public class UserBean {
         em.persist(user);
     }
     
+    public void updateUser(Integer id, String username, String passwordSha256, String email, String position) {
+        LOG.info("updateCar");
+        User user = em.find(User.class, id);
+        user.setUsername(username);
+        user.setPassword(passwordSha256);
+        user.setEmail(email);
+        user.setPosition(position);
+    }
+    
+    public void deleteUsersByIds(Collection<Integer> ids) {
+        LOG.info("deleteCarsByIds");
+        for (Integer id : ids) {
+            User user = em.find(User.class, id);
+            em.remove(user);
+        }
+    }
+    
     public List<UserDetails> getAllUsers() {
         LOG.info("getAllUsers");
         
@@ -64,5 +82,10 @@ public class UserBean {
             detailsList.add(userDetails);
         }
         return detailsList;
+    }
+    
+    public UserDetails findById(Integer userId) {
+        User user = em.find(User.class, userId);
+        return new UserDetails(user.getId(), user.getUsername(), user.getEmail(), user.getPosition());
     }
 }
