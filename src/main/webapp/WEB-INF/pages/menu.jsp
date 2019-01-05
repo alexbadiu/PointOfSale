@@ -24,6 +24,10 @@
             </li>
             
             <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/Stores">Stores</a>
+            </li>
+            
+            <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}">About <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
