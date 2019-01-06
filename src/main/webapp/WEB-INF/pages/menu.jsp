@@ -28,13 +28,11 @@
             </li>
             
             <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/Sales">Sales</a>
+            </li>
+            
+            <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}">About <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="${pageContext.request.contextPath}">Disabled</a>
             </li>
         </ul>
             
