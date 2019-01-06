@@ -6,10 +6,12 @@
 package com.pos.pointofsale.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -31,6 +33,8 @@ public class User implements Serializable {
     private String password;
     
     private String position;
+    
+    private Collection<Sale> sales;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -72,6 +76,15 @@ public class User implements Serializable {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    @OneToMany(mappedBy = "cashier")
+    public Collection<Sale> getSales() {
+        return sales;
+    }
+
+    public void setSales(Collection<Sale> sales) {
+        this.sales = sales;
     }
 
     @Override

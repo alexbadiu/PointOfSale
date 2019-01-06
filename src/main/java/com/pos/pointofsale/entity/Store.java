@@ -6,10 +6,12 @@
 package com.pos.pointofsale.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +29,8 @@ public class Store implements Serializable {
     private String name;
     
     private String address;
+    
+    private Collection<Sale> sales;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,6 +56,15 @@ public class Store implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @OneToMany(mappedBy = "store")
+    public Collection<Sale> getSales() {
+        return sales;
+    }
+
+    public void setSales(Collection<Sale> sales) {
+        this.sales = sales;
     }
 
     @Override
