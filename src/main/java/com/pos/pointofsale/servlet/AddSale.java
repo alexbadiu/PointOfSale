@@ -5,18 +5,18 @@
  */
 package com.pos.pointofsale.servlet;
 
-import com.pos.pointofsale.EJB.SaleBean;
-import com.pos.pointofsale.EJB.StoreBean;
-import com.pos.pointofsale.EJB.UserBean;
-import com.pos.pointofsale.details.StoreDetails;
-import com.pos.pointofsale.details.UserDetails;
+import com.pos.pointofsale.EJB.ProductBean;
+import com.pos.pointofsale.EJB.ProductSpecificationBean;
+import com.pos.pointofsale.EJB.TemporarBean;
+import com.pos.pointofsale.details.ProductSpecificationDetails;
+import com.pos.pointofsale.details.TemporarDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,18 +26,18 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alex
  */
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"CashierRole"}))
 @WebServlet(name = "AddSale", urlPatterns = {"/AddSale"})
 public class AddSale extends HttpServlet {
     
     @Inject
-    SaleBean saleBean;
+    ProductSpecificationBean productSpecificationBean;
     
     @Inject
-    UserBean userBean;
+    TemporarBean temporarBean;
     
     @Inject
-    StoreBean storeBean;
-
+    ProductBean productBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -76,14 +76,7 @@ public class AddSale extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        
-        List<UserDetails> users = userBean.getAllUsers();
-        request.setAttribute("users", users);
-        
-        List<StoreDetails> stores = storeBean.getAllStores();
-        request.setAttribute("stores", stores);
-        
+        temporarBean.removeAll();
         request.getRequestDispatcher("/WEB-INF/pages/addSale.jsp").forward(request, response);
     }
 
@@ -98,18 +91,53 @@ public class AddSale extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
         
-        LocalDate saleDate = LocalDate.now();
-        LocalTime saleTime = LocalTime.now();
+        String barcode = request.getParameter("barcode");
         
-        int cashierId = Integer.parseInt(request.getParameter("cashierId"));
-        int storeId = Integer.parseInt(request.getParameter("storeId"));
-        double paymentAmount = Double.parseDouble(request.getParameter("paymentAmount"));
-        
-        saleBean.createSale(saleDate, saleTime, cashierId, storeId, paymentAmount);
-        
-        response.sendRedirect(request.getContextPath() + "/Sales");
+        if (barcode == "") {
+            List<TemporarDetails> temporarProducts = temporarBean.getAllTemporars();
+            request.setAttribute("temporarProducts", temporarProducts);
+
+            Double total = temporarBean.getTotal();
+            request.setAttribute("total", total);
+            
+            request.getRequestDispatcher("/WEB-INF/pages/addSale.jsp").forward(request, response);
+        } else {
+            ProductSpecificationDetails prodSpecDetails = productSpecificationBean.findByBarcode(barcode);
+            if(prodSpecDetails == null){
+                List<TemporarDetails> temporarProducts = temporarBean.getAllTemporars();
+                request.setAttribute("temporarProducts", temporarProducts);
+
+                Double total = temporarBean.getTotal();
+                request.setAttribute("total", total);
+                request.getRequestDispatcher("/WEB-INF/pages/addSale.jsp").forward(request, response);
+            } else {
+                
+                Integer quantity = Integer.parseInt(request.getParameter("quantity"));
+
+                TemporarDetails t = temporarBean.findByName(prodSpecDetails.getProdName());
+                if(t!=null)
+                {
+                    Integer id = t.getId();
+                    Integer quant = quantity+t.getQuantity();
+                    Double  price = prodSpecDetails.getPrice()*quant;
+                    temporarBean.updateTotal(id, quant, price);
+
+                }
+                else
+                {
+                    temporarBean.createTemporar(prodSpecDetails.getProdName(), prodSpecDetails.getDescription(), prodSpecDetails.getPrice(),quantity);
+                }
+
+                List<TemporarDetails> temporarProducts = temporarBean.getAllTemporars();
+                request.setAttribute("temporarProducts", temporarProducts);
+
+                Double total = temporarBean.getTotal();
+                request.setAttribute("total", total);
+
+                request.getRequestDispatcher("/WEB-INF/pages/addSale.jsp").forward(request, response);
+            }
+        }
     }
 
     /**
