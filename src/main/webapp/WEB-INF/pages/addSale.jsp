@@ -12,43 +12,70 @@
     <h1>Add Sale</h1>
     <form class="needs-validation" novalidate method="POST" action="${pageContext.request.contextPath}/AddSale">
         <div class="row">
-            <div class="mb-3">
-                <label for="cashierId">Cashier</label>
-                <select class="custom-select d-block w-100" name="cashierId" id="cashierId" required>
-                  <option value="">Choose...</option>
-                  <c:forEach var="user" items="${users}" varStatus="status">
-                      <option value="${user.id}">${user.username}</option>
-                  </c:forEach>
-                </select>
-                <div class="invalid-feedback">
-                    Please select a valid user (cashier).
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="mb-10">
+                        <label for="barcode">Barcode</label>
+                        <input type="text" class="form-control" name="barcode" id="barcode" placeholder="10010101">
+                        <div class="invalid-feedback">
+                            Barcode is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-10">
+                        <input type="number" min="1"  class="form-control" name="quantity" id="quantity"  value="1">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Add product</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Name</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Description</h4>
+                    </div>
+                    <div class="col-md-2">
+                        <h4>Price</h4>
+                    </div>
+                    <div class="col-md-2">
+                        <h4>Quantity</h4>
+                    </div>
+                </div>
+                <c:forEach var="temporarProduct" items="${temporarProducts}" varStatus="status">
+                    <div class="row">
+                        <div class="col-md-4">
+                            ${temporarProduct.name}
+                        </div>
+                        <div class="col-md-4">
+                            ${temporarProduct.description}
+                        </div>
+                        <div class="col-md-2">
+                            $${temporarProduct.price}
+                        </div>
+                        <div class="col-md-2">
+                            ${temporarProduct.quantity}
+                        </div>
+                    </div>
+                </c:forEach>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                            Total Payment:
+                    </div>
+                    <div class="col-md-4">
+                            ${total}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-10">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" formaction="${pageContext.request.contextPath}/ProcessSale" name="submit" value="pressed">Submit sale</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="mb-3">
-                <label for="storeId">Store</label>
-                <select class="custom-select d-block w-100" name="storeId" id="storeId" required>
-                  <option value="">Choose...</option>
-                  <c:forEach var="store" items="${stores}" varStatus="status">
-                      <option value="${store.id}">${store.name}</option>
-                  </c:forEach>
-                </select>
-                <div class="invalid-feedback">
-                    Please select a valid store.
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="mb-3">
-                <label for="paymentAmount">Payment amount</label>
-                <input type="number" step="0.01" min="0" class="form-control" name="paymentAmount" id="paymentAmount" placeholder="3.44" required>
-                <div class="invalid-feedback">
-                    Please enter a valid Payment amount (number).
-                </div>
-            </div>
-        </div>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Save</button>
     </form>
     <script>
       // Example starter JavaScript for disabling form submissions if there are invalid fields
