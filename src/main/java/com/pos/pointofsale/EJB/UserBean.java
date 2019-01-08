@@ -44,7 +44,7 @@ public class UserBean {
     }
     
     public void updateUser(Integer id, String username, String passwordSha256, String email, String position) {
-        LOG.info("updateCar");
+        LOG.info("updateUser");
         User user = em.find(User.class, id);
         user.setUsername(username);
         user.setPassword(passwordSha256);
@@ -53,7 +53,7 @@ public class UserBean {
     }
     
     public void deleteUsersByIds(Collection<Integer> ids) {
-        LOG.info("deleteCarsByIds");
+        LOG.info("deleteUsersByIds");
         for (Integer id : ids) {
             User user = em.find(User.class, id);
             em.remove(user);
