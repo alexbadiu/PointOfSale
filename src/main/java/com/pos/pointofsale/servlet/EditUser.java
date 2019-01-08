@@ -13,6 +13,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alex
  */
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"ManagerRole"}))
 @WebServlet(name = "EditUser", urlPatterns = {"/EditUser"})
 public class EditUser extends HttpServlet {
     
