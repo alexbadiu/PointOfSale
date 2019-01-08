@@ -11,10 +11,27 @@
 <t:pageTemplate pageTitle="Users">
     <h1>Users</h1>
     <form method="POST" action="${pageContext.request.contextPath}/Users">
-        <p>
-            <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/AddUser" role="button">Add User</a>
-            <button class="btn btn-danger" type="submit">Delete users</button>
-        </p>
+        <c:if test="${pageContext.request.isUserInRole('ManagerRole')}">
+            <p>
+                <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/AddUser" role="button">Add User</a>
+                <button class="btn btn-danger" type="submit">Delete users</button>
+            </p>
+        </c:if>
+        <div class="row">
+            <div class="col-md">
+            </div>
+            <div class="col-md-3">
+                <h4>Username</h4>
+            </div>
+            <div class="col-md-3">
+                <h4>Email</h4>
+            </div>
+            <div class="col-md-3">
+                <h4>Position</h4>
+            </div>
+            <div class="col-md-2">
+            </div>
+        </div>
         <c:forEach var="user" items="${users}" varStatus="status">
             <div class="row">
                 <div class="col-md">

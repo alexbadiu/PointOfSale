@@ -11,9 +11,11 @@
 <t:pageTemplate pageTitle="Sales">
     <h1>Sales</h1>
     <form method="POST" action="${pageContext.request.contextPath}/Sales">
-        <p>
-            <button class="btn btn-danger" type="submit">Delete sales</button>
-        </p>
+        <c:if test="${pageContext.request.isUserInRole('ManagerRole')}">
+            <p>
+                <button class="btn btn-danger" type="submit">Delete sales</button>
+            </p>
+        </c:if>
         <c:forEach var="sale" items="${sales}" varStatus="status">
             <div class="row">
                 <div class="col-md-2">
