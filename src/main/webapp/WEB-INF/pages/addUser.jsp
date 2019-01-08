@@ -47,7 +47,8 @@
             <div class="mb-3">
                 <label for="position">Position</label>
                 <select class="custom-select d-block w-100" name="position" id="position" required>
-                  <option value="CLIENT">Client</option>
+                  <option value="CASHIER">Cashier</option>
+                  <option value="MANAGER">Manager</option>
                   <option value="ADMIN">Administrator</option>
                 </select>
                 <div class="invalid-feedback">
