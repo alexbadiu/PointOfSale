@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -87,5 +88,20 @@ public class UserBean {
     public UserDetails findById(Integer userId) {
         User user = em.find(User.class, userId);
         return new UserDetails(user.getId(), user.getUsername(), user.getEmail(), user.getPosition());
+    }
+    
+     public UserDetails findByName(String username) {
+        
+         LOG.info("getTempProdByName");
+         try{
+        Query query = em.createQuery("SELECT u FROM User u WHERE u.username = :username")
+                .setParameter("username", username)
+                .setMaxResults(1);
+        User user = (User) query.getSingleResult();
+        return new UserDetails(user.getId(), user.getUsername(),user.getEmail(),user.getPosition());
+         }catch(NoResultException ex)
+         {
+             return null;
+         }
     }
 }
