@@ -16,6 +16,25 @@
                 <button class="btn btn-danger" type="submit">Delete sales</button>
             </p>
         </c:if>
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h4>Date</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Time</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Cashier</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Store</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Payment</h4>
+            </div>
+        </div>
         <c:forEach var="sale" items="${sales}" varStatus="status">
             <div class="row">
                 <div class="col-md-2">

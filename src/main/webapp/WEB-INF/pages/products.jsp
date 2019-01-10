@@ -17,27 +17,48 @@
                 <button class="btn btn-danger" type="submit">Delete products</button>
             </p>
         </c:if>
+        <div class="row">
+            <div class="col-md">
+            </div>
+            <div class="col-md-2">
+                <h4>Name</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Description</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Price</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Units</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Barcode</h4>
+            </div>
+            <div class="col-md">
+            </div>
+        </div>
         <c:forEach var="productSpecification" items="${productSpecifications}" varStatus="status">
             <div class="row">
                 <div class="col-md">
                     <input type="checkbox" class="form-check-input" name="product_ids" value="${productSpecification.id}" />
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     ${productSpecification.prodName}
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     ${productSpecification.description}
                 </div>
-                <div class="col-md">
+                <div class="col-md-2">
                     ${productSpecification.price}
                 </div>
-                <div class="col-md">
+                <div class="col-md-2">
                     ${productSpecification.unitOnStock}
                 </div>
                 <div class="col-md-2">
                     ${productSpecification.barcode}
                 </div>
-                <div class="col-md-1">
+                <div class="col-md">
                     <a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditProduct?id=${productSpecification.id}" role="button">Edit Product</a>
                 </div>
             </div>
