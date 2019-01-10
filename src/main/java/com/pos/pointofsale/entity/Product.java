@@ -28,7 +28,7 @@ public class Product implements Serializable {
     private String prodName;
     
     private ProductSpecification productSpecification;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId() {
@@ -38,7 +38,7 @@ public class Product implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
+    
     public String getProdName() {
         return prodName;
     }

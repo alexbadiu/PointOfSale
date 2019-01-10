@@ -12,6 +12,7 @@ import com.pos.pointofsale.EJB.TemporarBean;
 import com.pos.pointofsale.EJB.UserBean;
 import com.pos.pointofsale.details.ProductSpecificationDetails;
 import com.pos.pointofsale.details.TemporarDetails;
+import com.pos.pointofsale.details.UserDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -98,11 +99,12 @@ public class ProcessReturn extends HttpServlet {
          
         LocalDate saleDate = LocalDate.now();
         LocalTime saleTime = LocalTime.now(); 
-        int cashierId = -1;
+        UserDetails userDetails = userBean.findByName(request.getRemoteUser());
+        Integer userId = userDetails.getId();
         int storeId = 3;
         Double paymentAmount = temporarBean.getTotal();
         
-        saleBean.createSale(saleDate, saleTime, cashierId, storeId, paymentAmount);
+        saleBean.createSale(saleDate, saleTime, userId, storeId, paymentAmount);
         
         List<TemporarDetails> temporarDetailsList = temporarBean.getAllTemporars();
         
