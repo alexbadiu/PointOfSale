@@ -1,45 +1,63 @@
 <%-- 
     Document   : menu
-    Created on : Dec 5, 2018, 12:46:56 PM
-    Author     : 
+    Created on : Jan 4, 2019, 10:13:59 PM
+    Author     : Alex
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}">Parking Lot</a>
+    <a class="navbar-brand" href="${pageContext.request.contextPath}">Point of Sale</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item ${activePage eq 'Cars' ? ' active' : ''}">
-                <a class="nav-link" href="${pageContext.request.contextPath}/Cars">Cars</a>
-            </li>
-            <li class="nav-item ${pageContext.request.requestURI eq '/ParkingLot/about.jsp' ? ' active' : ''}">
-                <a class="nav-link" href="${pageContext.request.contextPath}/about.jsp">About <span class="sr-only">(current)</span></a>
-            </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                 <a class="nav-link" href="${pageContext.request.contextPath}">Home</a>
             </li>
+           
+            <c:if test="${pageContext.request.isUserInRole('ManagerRole')}">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/Users">Users</a>
+                </li>
+            </c:if>
+            
+            <c:if test="${pageContext.request.isUserInRole('AdminRole')}">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/Stores">Stores</a>
+                </li>
+            </c:if>
+            
+            <c:if test="${pageContext.request.isUserInRole('ManagerRole')}">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/Sales">Sales</a>
+                </li>
+            </c:if>
+            
+            <c:if test="${pageContext.request.isUserInRole('ManagerRole')}">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/Products">Products</a>
+                </li>
+            </c:if>
+            
             <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
+                <a class="nav-link" href="${pageContext.request.contextPath}">About <span class="sr-only">(current)</span></a>
             </li>
         </ul>
             
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item ${activePage eq 'Login' ? ' active' : ''}">
-                <a class="nav-link" href="${pageContext.request.contextPath}/Login">Login</a>
-            </li>
-             <li class="nav-item ${activePage eq 'Register' ? ' active' : ''}">
-                <a class="nav-link" href="${pageContext.request.contextPath}/Register">Register</a>
+            <li class="nav-item">
+                <c:choose>
+                    <c:when test="${pageContext.request.getRemoteUser() == null}">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/Login">Login</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/Logout">Logout</a>
+                    </c:otherwise>
+                </c:choose>
             </li>
         </ul>
     </div>

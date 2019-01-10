@@ -3,11 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.park.parkinglot.servlet;
+package com.pos.pointofsale.servlet;
 
+import com.pos.pointofsale.EJB.ProductBean;
+import com.pos.pointofsale.EJB.ProductSpecificationBean;
+import com.pos.pointofsale.details.ProductSpecificationDetails;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.security.DeclareRoles;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +24,17 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Asus
+ * @author Alex
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@DeclareRoles({"AdminRole", "ManagerRole", "CashierRole"})
+@ServletSecurity(
+        value = @HttpConstraint(
+                rolesAllowed = {
+                    "ManagerRole"
+                })
+)
+@WebServlet(name = "Products", urlPatterns = {"/Products"})
+public class Products extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,6 +45,13 @@ public class Login extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    @Inject
+    private ProductBean productBean;
+    
+    @Inject
+    private ProductSpecificationBean productSpecificationBean;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -37,10 +60,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
+            out.println("<title>Servlet Products</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Products at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +82,11 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
+        
+        List<ProductSpecificationDetails> productSpecifications = productSpecificationBean.getAllProductSpecifications();
+        request.setAttribute("productSpecifications", productSpecifications);
+        
+        request.getRequestDispatcher("/WEB-INF/pages/products.jsp").forward(request, response);
     }
 
     /**
@@ -74,7 +101,25 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
+        
+        String[] productSpecificationIdsAsString = request.getParameterValues("product_ids");
+        if (productSpecificationIdsAsString != null) {
+            List<Integer> productSpecificationIds = new ArrayList<>();
+            List<Integer> productIds = new ArrayList<>();
+            for (String productSpecificationIdAsString : productSpecificationIdsAsString) {
+                productSpecificationIds.add(Integer.parseInt(productSpecificationIdAsString));
+            } 
+            
+            for (Integer productSpecificationId : productSpecificationIds) {
+                ProductSpecificationDetails productSpecification = productSpecificationBean.findById(productSpecificationId);
+                productIds.add(productSpecification.getProdId());
+            }
+            
+            productSpecificationBean.deleteProductSpecificationsByIds(productSpecificationIds);
+            productBean.deleteProductsByIds(productIds);
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/Products");
     }
 
     /**
